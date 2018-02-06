@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using NBU.WorkoutTracker.Data;
 using NBU.WorkoutTracker.Models;
 using NBU.WorkoutTracker.Services;
+using NBU.WorkoutTracker.Core.Contracts;
+using NBU.WorkoutTracker.Core.Services;
+using NBU.WorkoutTracker.Infrastructure.DomainModels;
 
 namespace NBU.WorkoutTracker
 {

@@ -10,8 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NBU.WorkoutTracker.Models;
-using NBU.WorkoutTracker.Models.AccountViewModels;
+using NBU.WorkoutTracker.Core.Contracts;
+using NBU.WorkoutTracker.Core.ViewModels;
+using NBU.WorkoutTracker.Infrastructure.DomainModels;
 using NBU.WorkoutTracker.Services;
 
 namespace NBU.WorkoutTracker.Controllers
@@ -111,7 +112,7 @@ namespace NBU.WorkoutTracker.Controllers
         public async Task<IActionResult> LoginWith2fa(LoginWith2faViewModel model, bool rememberMe, string returnUrl = null)
         {
             if (!ModelState.IsValid)
-            {
+            { 
                 return View(model);
             }
 

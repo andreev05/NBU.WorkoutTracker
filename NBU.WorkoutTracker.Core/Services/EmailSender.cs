@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NBU.WorkoutTracker.Core.Contracts;
 
 namespace NBU.WorkoutTracker.Core.Services
 {

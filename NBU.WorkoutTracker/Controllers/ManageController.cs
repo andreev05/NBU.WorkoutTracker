@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NBU.WorkoutTracker.Core.Contracts;
+using NBU.WorkoutTracker.Infrastructure.DomainModels;
 using NBU.WorkoutTracker.Models;
 using NBU.WorkoutTracker.Models.ManageViewModels;
 using NBU.WorkoutTracker.Services;

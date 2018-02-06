@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NBU.WorkoutTracker.Infrastructure\NBU.WorkoutTracker.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
