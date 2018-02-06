@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NBU.WorkoutTracker.Services
+namespace NBU.WorkoutTracker.Core.Services
 {
     public interface IEmailSender
     {
