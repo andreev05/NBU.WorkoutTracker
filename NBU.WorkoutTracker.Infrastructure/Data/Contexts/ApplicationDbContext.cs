@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using NBU.WorkoutTracker.Infrastructure.DomainModels;
+using NBU.WorkoutTracker.Infrastructure.Identity;
 
 namespace NBU.WorkoutTracker.Data
 {

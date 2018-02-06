@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NBU.WorkoutTracker.Core.Contracts;
 using NBU.WorkoutTracker.Core.ViewModels;
-using NBU.WorkoutTracker.Infrastructure.DomainModels;
+using NBU.WorkoutTracker.Infrastructure.Identity;
 using NBU.WorkoutTracker.Services;
 
 namespace NBU.WorkoutTracker.Controllers

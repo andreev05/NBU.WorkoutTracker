@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NBU.WorkoutTracker.Data;
-using NBU.WorkoutTracker.Models;
-using NBU.WorkoutTracker.Services;
 using NBU.WorkoutTracker.Core.Contracts;
 using NBU.WorkoutTracker.Core.Services;
-using NBU.WorkoutTracker.Infrastructure.DomainModels;
+using NBU.WorkoutTracker.Data;
+using NBU.WorkoutTracker.Infrastructure.Identity;
 
 namespace NBU.WorkoutTracker
 {

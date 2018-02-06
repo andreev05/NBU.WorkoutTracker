@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using NBU.WorkoutTracker.Core.Contracts;
-using NBU.WorkoutTracker.Services;
 
 namespace NBU.WorkoutTracker.Services
 {
