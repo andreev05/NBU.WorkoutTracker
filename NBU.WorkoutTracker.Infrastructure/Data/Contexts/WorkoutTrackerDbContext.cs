@@ -1,12 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using NBU.WorkoutTracker.Infrastructure.Data.Models;
 using NBU.WorkoutTracker.Infrastructure.Identity;
 
-namespace NBU.WorkoutTracker.Data
+namespace NBU.WorkoutTracker.Infrastructure.Data.Contexts
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class WorkoutTrackerDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public DbSet<WorkoutTrackerItem> WorkoutTrackerItems { get; set; }
+
+        public WorkoutTrackerDbContext(DbContextOptions<WorkoutTrackerDbContext> options)
             : base(options)
         {
         }

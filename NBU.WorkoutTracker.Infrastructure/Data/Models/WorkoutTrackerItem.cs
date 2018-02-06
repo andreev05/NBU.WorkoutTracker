@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 {
-    class WorkoutTrackerItem
+    public class WorkoutTrackerItem
     {
     }
 }

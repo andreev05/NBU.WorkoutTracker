@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NBU.WorkoutTracker.Core.Contracts;
 using NBU.WorkoutTracker.Core.Services;
 using NBU.WorkoutTracker.Data;
+using NBU.WorkoutTracker.Infrastructure.Data.Contexts;
 using NBU.WorkoutTracker.Infrastructure.Identity;
 
 namespace NBU.WorkoutTracker
@@ -23,11 +24,11 @@ namespace NBU.WorkoutTracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<WorkoutTrackerDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<WorkoutTrackerDbContext>()
                 .AddDefaultTokenProviders();
 
             // Add application services.
