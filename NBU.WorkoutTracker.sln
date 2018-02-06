@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBU.WorkoutTracker", "NBU.WorkoutTracker\NBU.WorkoutTracker.csproj", "{C7781014-3A0E-4C7A-B042-B3DDEC8D90CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBU.WorkoutTracker.Core", "NBU.WorkoutTracker.Core\NBU.WorkoutTracker.Core.csproj", "{EA168855-A9F7-4B89-BED0-A9C8AD7ED6CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBU.WorkoutTracker.Infrastructure", "NBU.WorkoutTracker.Infrastructure\NBU.WorkoutTracker.Infrastructure.csproj", "{799956F4-F7FB-47EE-95B9-B0284E40C33B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{C7781014-3A0E-4C7A-B042-B3DDEC8D90CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7781014-3A0E-4C7A-B042-B3DDEC8D90CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7781014-3A0E-4C7A-B042-B3DDEC8D90CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA168855-A9F7-4B89-BED0-A9C8AD7ED6CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA168855-A9F7-4B89-BED0-A9C8AD7ED6CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA168855-A9F7-4B89-BED0-A9C8AD7ED6CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA168855-A9F7-4B89-BED0-A9C8AD7ED6CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{799956F4-F7FB-47EE-95B9-B0284E40C33B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{799956F4-F7FB-47EE-95B9-B0284E40C33B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{799956F4-F7FB-47EE-95B9-B0284E40C33B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{799956F4-F7FB-47EE-95B9-B0284E40C33B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
