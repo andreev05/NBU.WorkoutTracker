@@ -8,9 +8,8 @@ using NBU.WorkoutTracker.Infrastructure.Identity;
 
 namespace NBU.WorkoutTracker.Infrastructure.Data.Contexts
 {
-    public class WorkoutTrackerDbContext : IdentityDbContext<ApplicationUser>
+    public class WorkoutTrackerDbContext : IdentityDbContext<WorkoutTrackerUser>
     {
-        public DbSet<WorkoutTrackerItem> WorkoutTrackerItems { get; set; }
 
         public WorkoutTrackerDbContext(DbContextOptions<WorkoutTrackerDbContext> options)
             : base(options)
