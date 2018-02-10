@@ -25,9 +25,9 @@ namespace NBU.WorkoutTracker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<WorkoutTrackerDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("MSSqlConnection")));
 
-            services.AddIdentity<WorkoutTrackerUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<WorkoutTrackerDbContext>()
                 .AddDefaultTokenProviders();
 
