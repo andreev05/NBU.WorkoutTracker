@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NBU.WorkoutTracker.Core.Contracts;
 using NBU.WorkoutTracker.Core.Services;
-using NBU.WorkoutTracker.Data;
 using NBU.WorkoutTracker.Infrastructure.Data.Contexts;
 using NBU.WorkoutTracker.Infrastructure.Identity;
 
