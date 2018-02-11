@@ -11,9 +11,10 @@ using System;
 namespace NBU.WorkoutTracker.Infrastructure.Migrations
 {
     [DbContext(typeof(WorkoutTrackerDbContext))]
-    partial class WorkoutTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180211104215_Add Models")]
+    partial class AddModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -19,6 +19,8 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 
         public float Weight { get; set; }
 
+        public int Mins { get; set; }
+
         public bool Cheat { get; set; }
 
 

@@ -20,5 +20,7 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Models
         public int? TargetSets { get; set; }
 
         public float TargetWeight { get; set; }
+
+        public int TargetMins { get; set; }
     }
 }
