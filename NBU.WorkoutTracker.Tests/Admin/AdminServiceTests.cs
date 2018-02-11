@@ -17,7 +17,7 @@ namespace NBU.WorkoutTracker.Tests.Admin
     public class AdminServiceTests
     {
         [Test]
-        public void ShouldReturnUsersAndRoles()
+        public void ShouldReturnUsers()
         {
            //Arrange
             var fakeUsers = new List<ApplicationUser>()
@@ -37,29 +37,32 @@ namespace NBU.WorkoutTracker.Tests.Admin
             }.AsQueryable();
 
 
-            var fakeRoles = new List<IdentityRole>()
-            {
+            //var fakeRoles = new List<IdentityRole>()
+            //{
 
-                new IdentityRole()
-                {
-                    Name = "role1"
-                },
-                new IdentityRole()
-                {
-                    Name = "role2"
-                }
-            }.AsQueryable();
+            //    new IdentityRole()
+            //    {
+            //        Name = "role1"
+            //    },
+            //    new IdentityRole()
+            //    {
+            //        Name = "role2"
+            //    }
+            //}.AsQueryable();
 
-            Mock<UserManager<ApplicationUser>> userManagerMoq = new Mock<UserManager<ApplicationUser>>();
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+            var userManagerMoq = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+
             userManagerMoq.Setup(x => x.Users).Returns(fakeUsers);
 
             // Act
             var adminService = new AdminService(userManagerMoq.Object);
+
             var actualUsersAndRoles = adminService.GetUsers();
 
 
             // Assert
-            Assert.Equals(actualUsersAndRoles.Count, 2);
+            Assert.AreEqual(actualUsersAndRoles.Count, 2);
         }
     }
 }
