@@ -12,7 +12,7 @@ namespace NBU.WorkoutTracker.Controllers
     /// <summary>
     /// The admin can only view the users and create new admins
     /// </summary>
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         IAdminService adminService;
