@@ -76,17 +76,6 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Repositores
                 .AsNoTracking();
         }
 
-
-        /// <summary>
-        /// Adding "includes" to the repository pattern. 
-        /// Usage userRepository.FindBy(x => x.Username == username, x.Roles) adding the roles to the username
-        /// </summary>
-        public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
-        {
-            var query = All().Where(predicate);
-            return includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-        }
-
         /// <summary>
         /// Deletes a record from database
         /// </summary>
