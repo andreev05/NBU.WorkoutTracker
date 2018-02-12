@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NBU.WorkoutTracker.Infrastructure.Identity;
 
 namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 {
@@ -25,5 +26,9 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Models
         /// What workouts are completed.
         /// </summary>
         public ICollection<CompletedWorkout> CompletedWorkouts { get; set; }
+
+        public string ApplicationUserId { get; set; }
+
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

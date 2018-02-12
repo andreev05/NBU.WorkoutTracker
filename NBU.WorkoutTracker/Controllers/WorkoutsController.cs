@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NBU.WorkoutTracker.Core.ViewModels;
-using NBU.WorkoutTracker.Infrastructure.Data.Contexts;
 using NBU.WorkoutTracker.Infrastructure.Data.Contracts;
 using NBU.WorkoutTracker.Infrastructure.Data.Models;
+using NBU.WorkoutTracker.Infrastructure.Identity;
 
 namespace NBU.WorkoutTracker.Controllers
 {
@@ -16,47 +16,60 @@ namespace NBU.WorkoutTracker.Controllers
     {
         private readonly IRDBERepository<Workout> workoutsRepo;
         private readonly IRDBERepository<Exercise> exercisesRepo;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public WorkoutsController(IRDBERepository<Workout> workoutsRepo, IRDBERepository<Exercise> exercisesRepo)
+        public WorkoutsController(IRDBERepository<Workout> workoutsRepo, IRDBERepository<Exercise> exercisesRepo, UserManager<ApplicationUser> userManager)
         {
             this.workoutsRepo = workoutsRepo;
             this.exercisesRepo = exercisesRepo;
+            this.userManager = userManager;
         }
 
         // GET: Workouts
         public async Task<IActionResult> Index()
         {
             using (workoutsRepo)
-            { 
+            using (userManager)
+            {
+                var user = await userManager.GetUserAsync(HttpContext.User);
+
                 var workouts = workoutsRepo.All();
-                return View(await workouts.ToListAsync());
+                return View(await workouts.Where(w => w.ApplicationUserId == user.Id).ToListAsync());
             }
         }
 
         // GET: Workouts/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var workout = workoutsRepo.GetById(id);
+            using (workoutsRepo)
+            using (userManager)
+            { 
+                var workout = workoutsRepo.GetById(id);
 
-            if (workout == null)
-            {
-                return NotFound();
+                var user = await userManager.GetUserAsync(HttpContext.User);
+
+                if (workout == null || workout.ApplicationUserId != user.Id)
+                {
+                    return NotFound();
+                }
+
+                return View(workout);
             }
-
-            return View(workout);
         }
 
         // GET: Workouts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             using (exercisesRepo)
+            using (userManager)
             {
-                ViewBag.AllExerciseNames = exercisesRepo.All().Select(e => new SelectListItem() { Text = e.ExerciseName }).ToList();
+                var user = await userManager.GetUserAsync(HttpContext.User);
+                ViewBag.AllExerciseNames = exercisesRepo.All().Where(e => e.ApplicationUserId == user.Id).Select(e => new SelectListItem() { Text = e.ExerciseName }).ToList();
             }
 
             return View();
@@ -67,22 +80,27 @@ namespace NBU.WorkoutTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreateWorkoutViewModel vm)
+        public async Task<IActionResult> Create(CreateWorkoutViewModel vm)
         {             
             if (ModelState.IsValid)
             {
                 using (exercisesRepo)
                 using (workoutsRepo)
+                using (userManager)
                 {
-                    var exercises = exercisesRepo.All().ToList();
+                    var user = await userManager.GetUserAsync(HttpContext.User);
+                    var exercises = exercisesRepo.All().Where(e => e.ApplicationUserId == user.Id).ToList();
                     var selectedExercisesNames = vm.Exercises.Where(e => e.Selected == true).Select(e => e.Text).ToList();
+                    
 
                     Workout workout = new Workout()
                     {
                         WorkoutName = vm.WorkoutName,
                         WorkoutDetails = vm.WorkoutDetails,
                         DateCreated = DateTime.Now,
-                        Exercises = exercises.Where(e => selectedExercisesNames.Contains(e.ExerciseName)).ToList()
+                        Exercises = exercises.Where(e => selectedExercisesNames.Contains(e.ExerciseName)).ToList(),
+                        ApplicationUserId = user.Id,
+                        ApplicationUser = user
                     };
 
                     workoutsRepo.Add(workout);
@@ -94,7 +112,7 @@ namespace NBU.WorkoutTracker.Controllers
         }
 
         // GET: Workouts/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -103,16 +121,19 @@ namespace NBU.WorkoutTracker.Controllers
 
             using (workoutsRepo)
             using (exercisesRepo)
+            using (userManager)
             {
 
                 var workout = workoutsRepo.GetById(id);
-                
+
                 if (workout == null)
                 {
                     return NotFound();
                 }
 
-                ViewBag.AllExerciseNames = exercisesRepo.All().Select(e => new SelectListItem() { Text = e.ExerciseName }).ToList();
+                var user = await userManager.GetUserAsync(HttpContext.User);
+
+                ViewBag.AllExerciseNames = exercisesRepo.All().Where(e => e.ApplicationUserId == user.Id).Select(e => new SelectListItem() { Text = e.ExerciseName }).ToList();
                 EditWorkoutViewModel vm = new EditWorkoutViewModel()
                 {
                     WorkoutId = workout.WorkoutId,
@@ -132,7 +153,7 @@ namespace NBU.WorkoutTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, EditWorkoutViewModel vm)
+        public async Task<IActionResult> Edit(int id, EditWorkoutViewModel vm)
         {
             if (id != vm.WorkoutId)
             {
@@ -143,7 +164,8 @@ namespace NBU.WorkoutTracker.Controllers
             {
                 try
                 {
-                    var exercises = exercisesRepo.All();
+                    var user = await userManager.GetUserAsync(HttpContext.User);
+                    var exercises = exercisesRepo.All().Where(e => e.ApplicationUserId == user.Id);
                     Workout workout = workoutsRepo.GetById(id);
 
                     var selectedExercises = vm.Exercises.Where(e => e.Selected == true).Select(e => e.Text);
@@ -171,6 +193,8 @@ namespace NBU.WorkoutTracker.Controllers
                 finally
                 {
                     workoutsRepo.Dispose();
+                    exercisesRepo.Dispose();
+                    userManager.Dispose();
                 }
                 return RedirectToAction(nameof(Index));
             }

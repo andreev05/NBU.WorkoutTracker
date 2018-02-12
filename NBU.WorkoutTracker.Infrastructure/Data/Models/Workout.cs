@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NBU.WorkoutTracker.Infrastructure.Identity;
 
 namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 {
@@ -19,6 +20,10 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 
         public ICollection<Exercise> Exercises { get; set; }
 
-        public ICollection<CompletedExercise> CompletedExercises { get; set; }
+        public ICollection<CompletedWorkout> CompletedWorkouts { get; set; }
+
+        public string ApplicationUserId { get; set; }
+
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

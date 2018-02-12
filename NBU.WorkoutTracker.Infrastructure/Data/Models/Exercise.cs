@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NBU.WorkoutTracker.Infrastructure.Identity;
 
 namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 {
@@ -22,5 +23,11 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Models
         public float TargetWeight { get; set; }
 
         public int TargetMins { get; set; }
+
+        public string ApplicationUserId { get; set; }
+
+        public ICollection<CompletedExercise> CompletedExercises { get; set; }
+
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

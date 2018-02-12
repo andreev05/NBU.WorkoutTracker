@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NBU.WorkoutTracker.Infrastructure.Data.Contexts;
@@ -72,6 +74,17 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Repositores
             return this.DbSet
                 .AsQueryable()
                 .AsNoTracking();
+        }
+
+
+        /// <summary>
+        /// Adding "includes" to the repository pattern. 
+        /// Usage userRepository.FindBy(x => x.Username == username, x.Roles) adding the roles to the username
+        /// </summary>
+        public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            var query = All().Where(predicate);
+            return includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
         }
 
         /// <summary>
