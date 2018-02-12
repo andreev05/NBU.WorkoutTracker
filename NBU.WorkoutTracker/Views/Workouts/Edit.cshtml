@@ -1,4 +1,4 @@
-﻿@model NBU.WorkoutTracker.Infrastructure.Data.Models.Workout
+﻿@model EditWorkoutViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -13,12 +13,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="WorkoutId" />
-            <div class="form-group">
-                <label asp-for="DateCreated" class="control-label"></label>
-                <input asp-for="DateCreated" class="form-control" />
-                <span asp-validation-for="DateCreated" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="WorkoutId"/>
             <div class="form-group">
                 <label asp-for="WorkoutName" class="control-label"></label>
                 <input asp-for="WorkoutName" class="form-control" />
@@ -28,6 +23,64 @@
                 <label asp-for="WorkoutDetails" class="control-label"></label>
                 <input asp-for="WorkoutDetails" class="form-control" />
                 <span asp-validation-for="WorkoutDetails" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkoutDetails" class="control-label"></label>
+                <input asp-for="WorkoutDetails" class="form-control" />
+                <span asp-validation-for="WorkoutDetails" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <select asp-for="Exercises"
+                        asp-items="ViewBag.AllExercises"></select>
+                @*<table>
+                    <thead>
+                        <tr>
+                            <th>
+                                ExerciseName
+                            </th>
+                            <th>
+                                TargetSets
+                            </th>
+                            <th>
+                                TargetReps
+                            </th>
+                            <th>
+                                TargetWeight
+                            </th>
+                            <th>
+                                TargetMins
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Exercises)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ExerciseName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TargetSets)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TargetReps)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TargetWeight)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TargetMins)
+                                </td>
+                                <td>
+                                    <a asp-controller="Exercises" asp-action="Edit" asp-route-id="@item.ExerciseId">Edit</a> |
+                                    <a asp-controller="Exercises" asp-action="Details" asp-route-id="@item.ExerciseId">Details</a> |
+                                    <a asp-action="Remove" asp-route-idparent="@Model.WorkoutId" asp-route-idchild="@item.ExerciseId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>*@
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />

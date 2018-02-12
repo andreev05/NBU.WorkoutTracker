@@ -42,7 +42,7 @@ namespace NBU.WorkoutTracker.Controllers
         {
             await adminService.CreateUser(vm);
 
-            return View("Index");
+            return View(nameof(Index));
         }
     }
 }

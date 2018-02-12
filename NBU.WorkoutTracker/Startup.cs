@@ -58,6 +58,10 @@ namespace NBU.WorkoutTracker
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                    name: "parentchild",
+                    template: "{controller}/{action}/{idparent}/{idchild}");
+
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
