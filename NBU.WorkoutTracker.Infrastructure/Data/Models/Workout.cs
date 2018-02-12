@@ -18,7 +18,7 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 
         public string WorkoutDetails { get; set; }
 
-        public ICollection<Exercise> Exercises { get; set; }
+        public ICollection<WorkoutExercise> WorkoutExercises { get; set; }
 
         public ICollection<CompletedWorkout> CompletedWorkouts { get; set; }
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NBU.WorkoutTracker.Core.ViewModels;
 using NBU.WorkoutTracker.Infrastructure.Data.Contexts;
 using NBU.WorkoutTracker.Infrastructure.Data.Models;
 using NBU.WorkoutTracker.Infrastructure.Identity;
@@ -56,10 +57,20 @@ namespace NBU.WorkoutTracker.Controllers
         }
 
         // GET: Exercises/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-
-            return View();
+            using (_context)
+            {
+                var user = await userManager.GetUserAsync(HttpContext.User);
+                var workouts = _context.Workouts.Where(w => w.ApplicationUserId == user.Id);
+                var vm = new CreateExerciseViewModel();
+                vm.Workouts = workouts.Select(w => new SelectListItem()
+                                                    {
+                                                        Text = w.WorkoutName,
+                                                        Value = w.WorkoutId.ToString()
+                                                    }).ToList();
+                return View(vm);
+            }
         }
 
         // POST: Exercises/Create
@@ -67,7 +78,7 @@ namespace NBU.WorkoutTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ExerciseId,DateCreated,ExerciseName,TargetReps,TargetSets,TargetWeight,TargetMins, WorkoutId")] Exercise exercise)
+        public async Task<IActionResult> Create([Bind("ExerciseId,ExerciseName,TargetReps,TargetSets,TargetWeight,TargetMins, WorkoutId")] Exercise exercise)
         {
             
                 
@@ -79,7 +90,7 @@ namespace NBU.WorkoutTracker.Controllers
                     var user = await userManager.GetUserAsync(HttpContext.User);
                     exercise.ApplicationUserId = user.Id;
                     exercise.ApplicationUser = user;
-
+                    exercise.DateCreated = DateTime.Now;
                     _context.Add(exercise);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -112,7 +123,7 @@ namespace NBU.WorkoutTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ExerciseId,DateCreated,ExerciseName,TargetReps,TargetSets,TargetWeight,TargetMins")] Exercise exercise)
+        public async Task<IActionResult> Edit(int id, [Bind("ExerciseId,ExerciseName,TargetReps,TargetSets,TargetWeight,TargetMins")] Exercise exercise)
         {
             if (id != exercise.ExerciseId)
             {

@@ -1,4 +1,4 @@
-﻿@model NBU.WorkoutTracker.Infrastructure.Data.Models.Exercise
+﻿@model CreateExerciseViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -14,40 +14,31 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="DateCreated" class="control-label"></label>
-                <input asp-for="DateCreated" class="form-control" />
-                <span asp-validation-for="DateCreated" class="text-danger"></span>
+                <label asp-for="Exercise.ExerciseName" class="control-label"></label>
+                <input asp-for="Exercise.ExerciseName" class="form-control" />
+                <span asp-validation-for="Exercise.ExerciseName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ExerciseName" class="control-label"></label>
-                <input asp-for="ExerciseName" class="form-control" />
-                <span asp-validation-for="ExerciseName" class="text-danger"></span>
+                <label asp-for="Exercise.TargetReps" class="control-label"></label>
+                <input asp-for="Exercise.TargetReps" class="form-control" />
+                <span asp-validation-for="Exercise.TargetReps" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TargetReps" class="control-label"></label>
-                <input asp-for="TargetReps" class="form-control" />
-                <span asp-validation-for="TargetReps" class="text-danger"></span>
+                <label asp-for="Exercise.TargetSets" class="control-label"></label>
+                <input asp-for="Exercise.TargetSets" class="form-control" />
+                <span asp-validation-for="Exercise.TargetSets" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TargetSets" class="control-label"></label>
-                <input asp-for="TargetSets" class="form-control" />
-                <span asp-validation-for="TargetSets" class="text-danger"></span>
+                <label asp-for="Exercise.TargetWeight" class="control-label"></label>
+                <input asp-for="Exercise.TargetWeight" class="form-control" />
+                <span asp-validation-for="Exercise.TargetWeight" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TargetWeight" class="control-label"></label>
-                <input asp-for="TargetWeight" class="form-control" />
-                <span asp-validation-for="TargetWeight" class="text-danger"></span>
+                <label asp-for="Exercise.TargetMins" class="control-label"></label>
+                <input asp-for="Exercise.TargetMins" class="form-control" />
+                <span asp-validation-for="Exercise.TargetMins" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TargetMins" class="control-label"></label>
-                <input asp-for="TargetMins" class="form-control" />
-                <span asp-validation-for="TargetMins" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WorkoutId" class="control-label"></label>
-                <input asp-for="WorkoutId" class="form-control" />
-                <span asp-validation-for="WorkoutId" class="text-danger"></span>
-            </div>
+            <select asp-for="Exercise.WorkoutId"  asp-items="@Model.Workouts"></select>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>

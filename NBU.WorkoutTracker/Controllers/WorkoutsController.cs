@@ -91,16 +91,21 @@ namespace NBU.WorkoutTracker.Controllers
                     var user = await userManager.GetUserAsync(HttpContext.User);
                     var exercises = exercisesRepo.All().Where(e => e.ApplicationUserId == user.Id).ToList();
                     var selectedExercisesNames = vm.Exercises.Where(e => e.Selected == true).Select(e => e.Text).ToList();
-                    
+                    var filteredExcercises = exercises.Where(e => selectedExercisesNames.Contains(e.ExerciseName));
 
                     Workout workout = new Workout()
                     {
                         WorkoutName = vm.WorkoutName,
                         WorkoutDetails = vm.WorkoutDetails,
                         DateCreated = DateTime.Now,
-                        Exercises = exercises.Where(e => selectedExercisesNames.Contains(e.ExerciseName)).ToList(),
                         ApplicationUserId = user.Id
                     };
+                    
+
+                    foreach(var e in filteredExcercises)
+                    {
+                        workout.WorkoutExercises.Add(new WorkoutExercise() { Exercise = e, Workout = workout });
+                    }
 
                     workoutsRepo.Add(workout);
                     workoutsRepo.SaveChanges();
@@ -138,9 +143,9 @@ namespace NBU.WorkoutTracker.Controllers
                     WorkoutId = workout.WorkoutId,
                     WorkoutName = workout.WorkoutName,
                     WorkoutDetails = workout.WorkoutDetails,
-                    Exercises = workout.Exercises.Select(e => new SelectListItem()
+                    Exercises = workout.WorkoutExercises.Select(e => new SelectListItem()
                     {
-                        Text = e.ExerciseName
+                        Text = exercisesRepo.GetById(e.ExerciseId).ExerciseName
                     }).ToList()
                 };
                 return View(vm);
@@ -170,7 +175,13 @@ namespace NBU.WorkoutTracker.Controllers
                     var selectedExercises = vm.Exercises.Where(e => e.Selected == true).Select(e => e.Text);
                     workout.WorkoutName = vm.WorkoutName;
                     workout.WorkoutDetails = vm.WorkoutDetails;
-                    workout.Exercises = exercises.Where(e => selectedExercises.Contains(e.ExerciseName)).ToList();
+                    var filteredExercises = exercises.Where(e => selectedExercises.Contains(e.ExerciseName)).ToList();
+
+
+                    foreach (var e in filteredExercises)
+                    {
+                        workout.WorkoutExercises.Add(new WorkoutExercise() { Exercise = e, Workout = workout });
+                    }
 
                     workoutsRepo.Update(workout);
 

@@ -23,6 +23,7 @@ namespace NBU.WorkoutTracker.Core.Services
         {
             this.completedWorkoutsRepo = completedWorkoutsRepo;
             this.completedExcercisesRepo = completedExcercisesRepo;
+            this.excercisesRepo = excercisesRepo;
         }
 
 

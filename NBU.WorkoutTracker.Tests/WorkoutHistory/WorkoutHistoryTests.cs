@@ -50,9 +50,10 @@ namespace NBU.WorkoutTracker.Tests.WorkoutHistory
             mockCompletedWorkoutsRepo.Setup(w => w.All()).Returns(fakeCompletedWorkouts);
 
             var mockCompletedExercisesRepo = new Mock<IRDBERepository<CompletedExercise>>();
+            var mockExercisesRepo = new Mock<IRDBERepository<Exercise>>();
 
             //Act
-            var mockWorkoutHistoryService = new WorkoutHistoryService(mockCompletedWorkoutsRepo.Object, mockCompletedExercisesRepo.Object);
+            var mockWorkoutHistoryService = new WorkoutHistoryService(mockCompletedWorkoutsRepo.Object, mockCompletedExercisesRepo.Object, mockExercisesRepo.Object);
             var result = mockWorkoutHistoryService.GetUserWorkoutHistory("");
 
             //Assert
@@ -84,8 +85,10 @@ namespace NBU.WorkoutTracker.Tests.WorkoutHistory
 
             var mockCompletedExercisesRepo = new Mock<IRDBERepository<CompletedExercise>>();
 
+            var mockExercisesRepo = new Mock<IRDBERepository<Exercise>>();
+
             //Act
-            var mockWorkoutHistoryService = new WorkoutHistoryService(mockCompletedWorkoutsRepo.Object, mockCompletedExercisesRepo.Object);
+            var mockWorkoutHistoryService = new WorkoutHistoryService(mockCompletedWorkoutsRepo.Object, mockCompletedExercisesRepo.Object, mockExercisesRepo.Object);
             mockWorkoutHistoryService.AddCompletedWorkout("", fakeCreateCompletedWorkoutViewModel);
 
             //Assert

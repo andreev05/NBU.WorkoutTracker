@@ -30,7 +30,7 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 
         public int WorkoutId { get; set; }
 
-        public Workout Workout { get; set; }
+        public ICollection<WorkoutExercise> WorkoutExercises { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
     }
