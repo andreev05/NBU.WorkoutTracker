@@ -21,10 +21,24 @@ namespace NBU.WorkoutTracker.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //workoutHistoryService.GetUserWorkoutHistory(userId);
-            return View();
+            using (userManager)
+            {
+                var user = await userManager.GetUserAsync(HttpContext.User);
+                var completedWorkouts = workoutHistoryService.GetUserWorkoutHistory(user.Id);
+                return View(completedWorkouts);
+            }
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            using (userManager)
+            {
+                var user = await userManager.GetUserAsync(HttpContext.User);
+                var completedWorkouts = workoutHistoryService.AddCompletedWorkout(user.Id, id);
+                return View(completedWorkouts);
+            }
         }
     }
 }

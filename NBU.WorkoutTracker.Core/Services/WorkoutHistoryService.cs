@@ -27,6 +27,7 @@ namespace NBU.WorkoutTracker.Core.Services
             using (completedWorkoutsRepo)
             {                
                 var workouts = completedWorkoutsRepo.All()
+                    .Include(cw => cw.Workout)
                     .Include(cw => cw.CompletedExercises)
                     .ThenInclude(ce => ce.Exercise);
                 return workouts.ToList();

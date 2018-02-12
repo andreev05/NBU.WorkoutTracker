@@ -8,7 +8,6 @@ namespace NBU.WorkoutTracker.Core.Contracts
 {
     public interface IWorkoutHistory
     {
-        //List<WorkoutHistoryViewModel> GetUserWorkoutHistory(string userId);
         IEnumerable<CompletedWorkout> GetUserWorkoutHistory(string userId);
 
         void AddCompletedWorkout(string userId);
