@@ -32,7 +32,7 @@ namespace NBU.WorkoutTracker
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IAdmin, AdminService>();
 
             services.AddMvc();
         }

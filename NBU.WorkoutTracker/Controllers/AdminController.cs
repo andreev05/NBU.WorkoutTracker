@@ -15,9 +15,9 @@ namespace NBU.WorkoutTracker.Controllers
     [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
-        IAdminService adminService;
+        IAdmin adminService;
 
-        public AdminController(IAdminService adminService)
+        public AdminController(IAdmin adminService)
         {
             this.adminService = adminService;
         }

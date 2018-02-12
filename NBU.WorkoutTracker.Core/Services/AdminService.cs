@@ -12,7 +12,7 @@ using NBU.WorkoutTracker.Infrastructure.Identity;
 
 namespace NBU.WorkoutTracker.Core.Services
 {
-    public class AdminService : IAdminService
+    public class AdminService : IAdmin
     {
         UserManager<ApplicationUser> userManager;
         RoleManager<IdentityRole> roleManager;

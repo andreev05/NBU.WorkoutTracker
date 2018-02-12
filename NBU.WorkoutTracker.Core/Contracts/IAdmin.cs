@@ -6,7 +6,7 @@ using NBU.WorkoutTracker.Core.ViewModels;
 
 namespace NBU.WorkoutTracker.Core.Contracts
 {
-    public interface IAdminService
+    public interface IAdmin
     {
         Task<List<UserViewModel>> GetUsers();
 

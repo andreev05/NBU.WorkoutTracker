@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NBU.WorkoutTracker.Core.Contracts
 {
-    interface IWorkoutTrackerService
+    interface IWorkoutHistory
     {
     }
 }
