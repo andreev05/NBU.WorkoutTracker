@@ -22,9 +22,9 @@ namespace NBU.WorkoutTracker.Controllers
             this.adminService = adminService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var users = adminService.GetUsers();
+            var users = await adminService.GetUsers();
 
             return View(users);
         }

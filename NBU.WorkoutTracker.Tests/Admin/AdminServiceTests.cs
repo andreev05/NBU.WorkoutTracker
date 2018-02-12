@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using NBU.WorkoutTracker.Infrastructure.Data.Contexts;
 using System.Linq;
 using NBU.WorkoutTracker.Core.Services;
+using System.Threading.Tasks;
 
 namespace NBU.WorkoutTracker.Tests.Admin
 {
@@ -17,10 +18,10 @@ namespace NBU.WorkoutTracker.Tests.Admin
     public class AdminServiceTests
     {
         [Test]
-        public void ShouldReturnUsers()
+        public async Task ShouldReturnUsers()
         {
            //Arrange
-            var fakeUsers = new List<ApplicationUser>()
+            IList<ApplicationUser> fakeUsers = new List<ApplicationUser>()
             {
                 new ApplicationUser()
                 {
@@ -34,31 +35,36 @@ namespace NBU.WorkoutTracker.Tests.Admin
                     UserName = "user2",
                     PhoneNumber = "2345"
                 }
+            };
+
+
+            var fakeRoles = new List<IdentityRole>()
+            {
+
+                new IdentityRole()
+                {
+                    Name = "user"
+                },
+                new IdentityRole()
+                {
+                    Name = "admin"
+                }
             }.AsQueryable();
 
-
-            //var fakeRoles = new List<IdentityRole>()
-            //{
-
-            //    new IdentityRole()
-            //    {
-            //        Name = "role1"
-            //    },
-            //    new IdentityRole()
-            //    {
-            //        Name = "role2"
-            //    }
-            //}.AsQueryable();
-
             var userStore = new Mock<IUserStore<ApplicationUser>>();
+            var roleStore = new Mock<IRoleStore<IdentityRole>>();
+
             var userManagerMoq = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+            var roleManagerMoq = new Mock<RoleManager<IdentityRole>>(roleStore.Object, null, null, null, null);
 
-            userManagerMoq.Setup(x => x.Users).Returns(fakeUsers);
-
+            roleManagerMoq.Setup(x => x.Roles).Returns(fakeRoles);
+            //userManagerMoq.Setup(x => x.Users).Returns(fakeUsers);
+            userManagerMoq.Setup(x => x.GetUsersInRoleAsync("user")).Returns(Task.FromResult(fakeUsers));
+            
             // Act
-            var adminService = new AdminService(userManagerMoq.Object);
+            var adminService = new AdminService(userManagerMoq.Object, roleManagerMoq.Object);
 
-            var actualUsersAndRoles = adminService.GetUsers();
+            var actualUsersAndRoles = await adminService.GetUsers();
 
 
             // Assert

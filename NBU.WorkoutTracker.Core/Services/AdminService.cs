@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using NBU.WorkoutTracker.Core.Contracts;
 using NBU.WorkoutTracker.Core.ViewModels;
 using NBU.WorkoutTracker.Infrastructure.Data.Contracts;
@@ -14,29 +15,48 @@ namespace NBU.WorkoutTracker.Core.Services
     public class AdminService : IAdminService
     {
         UserManager<ApplicationUser> userManager;
+        RoleManager<IdentityRole> roleManager;
 
 
-        public AdminService(UserManager<ApplicationUser> userManager)
+        public AdminService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
-
-        public List<UserViewModel> GetUsers()
+        /// <summary>
+        /// Gets users and their role. In this case the user has only one role.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<UserViewModel>> GetUsers()
         {
+
             using (userManager)
-            { 
-                var usersAndRoles = userManager.Users.Select(u =>
-                    new UserViewModel
-                    {
-                        Email = u.Email,
-                        UserName = u.UserName,
-                        PhoneNumber = u.PhoneNumber
+            using (roleManager)
+            {
+                var roles = roleManager.Roles;
+                List<UserViewModel> results = new List<UserViewModel>();
+                foreach(var role in roles)
+                { 
+                    
+                    var usersAndRoles = await userManager.GetUsersInRoleAsync(role.Name);
 
+                    if(usersAndRoles != null)
+                    { 
+                        results.AddRange(usersAndRoles.Select(u =>
+                            new UserViewModel
+                            {
+                                Email = u.Email,
+                                UserName = u.UserName,
+                                PhoneNumber = u.PhoneNumber,
+                                Role = role.Name
+                            }
+                        ).ToList());
                     }
-                ).ToList();
+                }
 
-                return usersAndRoles;
+
+                return results;
             }
         }
 
@@ -49,7 +69,12 @@ namespace NBU.WorkoutTracker.Core.Services
 
             using (userManager)
             { 
-                await userManager.CreateAsync(appUser, vm.Password);
+                var result = await userManager.CreateAsync(appUser, vm.Password);
+
+                if(result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(appUser, vm.Role);
+                }
             }
         }
     }

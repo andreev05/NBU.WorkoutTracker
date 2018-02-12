@@ -8,7 +8,7 @@ namespace NBU.WorkoutTracker.Core.Contracts
 {
     public interface IAdminService
     {
-        List<UserViewModel> GetUsers();
+        Task<List<UserViewModel>> GetUsers();
 
         Task CreateUser(CreateUserViewModel vm);
     }
