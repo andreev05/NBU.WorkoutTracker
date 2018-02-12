@@ -7,6 +7,7 @@ using NBU.WorkoutTracker.Infrastructure.Data.Contracts;
 using NBU.WorkoutTracker.Infrastructure.Data.Models;
 using System.Linq;
 using NBU.WorkoutTracker.Core.Services;
+using NBU.WorkoutTracker.Core.ViewModels;
 
 namespace NBU.WorkoutTracker.Tests.WorkoutHistory
 {
@@ -57,6 +58,38 @@ namespace NBU.WorkoutTracker.Tests.WorkoutHistory
             //Assert
             Assert.AreEqual(result.ToList().Count, 1);
             Assert.AreEqual(result.FirstOrDefault().CompletedExercises.FirstOrDefault().Exercise.ExerciseName, "running");
+        }
+
+        [Test]
+        public void ShouldCallAddRepoMethods()
+        {
+            //Arrange
+
+            var fakeCreateCompletedWorkoutViewModel = new CreateCompletedWorkoutViewModel
+            {
+                Comments = "workout comments",
+                WorkoutId = 1,
+                DetailedExercises = new List<DetailedExerciseViewModel>()
+                {
+                    new DetailedExerciseViewModel()
+                    {
+                        ExerciseId = 1,
+                        ExerciseName = "testExercise",
+                        Mins = 12,
+                        Comments = "exercise comments"
+                    }
+                }
+            };
+            var mockCompletedWorkoutsRepo = new Mock<IRDBERepository<CompletedWorkout>>();
+
+            var mockCompletedExercisesRepo = new Mock<IRDBERepository<CompletedExercise>>();
+
+            //Act
+            var mockWorkoutHistoryService = new WorkoutHistoryService(mockCompletedWorkoutsRepo.Object, mockCompletedExercisesRepo.Object);
+            mockWorkoutHistoryService.AddCompletedWorkout("", fakeCreateCompletedWorkoutViewModel);
+
+            //Assert
+            mockCompletedWorkoutsRepo.Verify(x => x.Add(It.IsAny<CompletedWorkout>()));
         }
     }
 }

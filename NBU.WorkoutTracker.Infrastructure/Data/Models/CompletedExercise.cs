@@ -22,14 +22,6 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 
         public int Mins { get; set; }
 
-        public bool Cheat { get; set; }
-
-
-        /// <summary>
-        /// The value should be set based the targets when the exercise was completed.
-        /// </summary>
-        public bool TargetsMet { get; set; }
-
         public string Comments { get; set; }
 
         public int ExerciseId { get; set; }

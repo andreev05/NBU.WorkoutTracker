@@ -28,6 +28,10 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 
         public ICollection<CompletedExercise> CompletedExercises { get; set; }
 
+        public int WorkoutId { get; set; }
+
+        public Workout Workout { get; set; }
+
         public ApplicationUser ApplicationUser { get; set; }
     }
 }

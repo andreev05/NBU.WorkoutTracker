@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NBU.WorkoutTracker.Infrastructure.Identity;
 using NBU.WorkoutTracker.Core.Contracts;
+using NBU.WorkoutTracker.Core.ViewModels;
 
 namespace NBU.WorkoutTracker.Controllers
 {
@@ -31,13 +32,32 @@ namespace NBU.WorkoutTracker.Controllers
             }
         }
 
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int workoutId)
+        {
+            CreateCompletedWorkoutViewModel vm = new CreateCompletedWorkoutViewModel();
+            using (userManager)
+            {
+                var user = await userManager.GetUserAsync(HttpContext.User);
+
+                if (!workoutHistoryService.CheckId(user.Id, workoutId))
+                {
+                    return NotFound();
+                }
+            
+                vm.WorkoutId = workoutId;
+
+                vm.DetailedExercises = workoutHistoryService.GetWorkoutExercises(user.Id, workoutId);
+                return View(nameof(Index));
+            }
+        }
+
+        public async Task<IActionResult> Create(CreateCompletedWorkoutViewModel vm)
         {
             using (userManager)
             {
                 var user = await userManager.GetUserAsync(HttpContext.User);
-                var completedWorkouts = workoutHistoryService.AddCompletedWorkout(user.Id, id);
-                return View(completedWorkouts);
+                workoutHistoryService.AddCompletedWorkout(user.Id, vm);
+                return View(nameof(Index));
             }
         }
     }

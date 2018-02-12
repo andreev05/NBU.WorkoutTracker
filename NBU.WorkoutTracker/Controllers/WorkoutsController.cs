@@ -99,8 +99,7 @@ namespace NBU.WorkoutTracker.Controllers
                         WorkoutDetails = vm.WorkoutDetails,
                         DateCreated = DateTime.Now,
                         Exercises = exercises.Where(e => selectedExercisesNames.Contains(e.ExerciseName)).ToList(),
-                        ApplicationUserId = user.Id,
-                        ApplicationUser = user
+                        ApplicationUserId = user.Id
                     };
 
                     workoutsRepo.Add(workout);

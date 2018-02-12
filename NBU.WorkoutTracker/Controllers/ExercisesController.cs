@@ -27,6 +27,7 @@ namespace NBU.WorkoutTracker.Controllers
         public async Task<IActionResult> Index()
         {
             using (userManager)
+            using (_context)
             {
                 var user = await userManager.GetUserAsync(HttpContext.User);
 
@@ -41,20 +42,23 @@ namespace NBU.WorkoutTracker.Controllers
             {
                 return NotFound();
             }
+            using (_context)
+            { 
+                var exercise = await _context.Exercises
+                    .SingleOrDefaultAsync(m => m.ExerciseId == id);
+                if (exercise == null)
+                {
+                    return NotFound();
+                }
 
-            var exercise = await _context.Exercises
-                .SingleOrDefaultAsync(m => m.ExerciseId == id);
-            if (exercise == null)
-            {
-                return NotFound();
+                return View(exercise);
             }
-
-            return View(exercise);
         }
 
         // GET: Exercises/Create
         public IActionResult Create()
         {
+
             return View();
         }
 
@@ -63,18 +67,19 @@ namespace NBU.WorkoutTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ExerciseId,DateCreated,ExerciseName,TargetReps,TargetSets,TargetWeight,TargetMins")] Exercise exercise)
+        public async Task<IActionResult> Create([Bind("ExerciseId,DateCreated,ExerciseName,TargetReps,TargetSets,TargetWeight,TargetMins, WorkoutId")] Exercise exercise)
         {
             
                 
             if (ModelState.IsValid)
             {
                 using (userManager)
+                using (_context)
                 {
                     var user = await userManager.GetUserAsync(HttpContext.User);
                     exercise.ApplicationUserId = user.Id;
                     exercise.ApplicationUser = user;
-               
+
                     _context.Add(exercise);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -91,12 +96,15 @@ namespace NBU.WorkoutTracker.Controllers
                 return NotFound();
             }
 
-            var exercise = await _context.Exercises.SingleOrDefaultAsync(m => m.ExerciseId == id);
-            if (exercise == null)
-            {
-                return NotFound();
+            using (_context)
+            { 
+                var exercise = await _context.Exercises.SingleOrDefaultAsync(m => m.ExerciseId == id);
+                if (exercise == null)
+                {
+                    return NotFound();
+                }
+                return View(exercise);
             }
-            return View(exercise);
         }
 
         // POST: Exercises/Edit/5
@@ -138,6 +146,10 @@ namespace NBU.WorkoutTracker.Controllers
                         throw;
                     }
                 }
+                finally
+                {
+                    _context.Dispose();
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(exercise);
@@ -166,18 +178,22 @@ namespace NBU.WorkoutTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var exercise = await _context.Exercises.SingleOrDefaultAsync(m => m.ExerciseId == id);
-            using (userManager)
-            {
-                var user = await userManager.GetUserAsync(HttpContext.User);
-                if(exercise.ApplicationUserId != user.Id)
+            using (_context)
+            { 
+                var exercise = await _context.Exercises.SingleOrDefaultAsync(m => m.ExerciseId == id);
+                using (userManager)
                 {
-                    return NotFound();
+                    var user = await userManager.GetUserAsync(HttpContext.User);
+                    if(exercise.ApplicationUserId != user.Id)
+                    {
+                        return NotFound();
+                    }
                 }
+
+                _context.Exercises.Remove(exercise);
+                await _context.SaveChangesAsync();    
             }
 
-            _context.Exercises.Remove(exercise);
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

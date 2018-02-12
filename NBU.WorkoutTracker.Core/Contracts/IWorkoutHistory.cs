@@ -10,10 +10,14 @@ namespace NBU.WorkoutTracker.Core.Contracts
     {
         IEnumerable<CompletedWorkout> GetUserWorkoutHistory(string userId);
 
-        void AddCompletedWorkout(string userId);
+        void AddCompletedWorkout(string userId, CreateCompletedWorkoutViewModel vm);
 
-        void AddExercisesToCompletedWorkout(string userId, int workoutId);
+        void AddExercisesToCompletedWorkout(string userId, int completedWorkoutId);
 
         void RemoveExerciseFromCompletedWorkout(string userId, int workoutId, int excerciseId);
+
+        IEnumerable<DetailedExerciseViewModel> GetWorkoutExercises(string userId, int workoutId);
+
+        bool CheckId(string userId, int workoutId);
     }
 }
