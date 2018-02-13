@@ -35,8 +35,9 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a asp-area="" asp-controller="Workouts" asp-action="Index">Workouts</a></li>
-                        <li><a asp-area="" asp-controller="Exercises" asp-action="Index">Exercises</a></li>
+                    <li><a asp-area="" asp-controller="Workouts" asp-action="Index">Workouts</a></li>
+                    <li><a asp-area="" asp-controller="Exercises" asp-action="Index">Exercises</a></li>
+                    <li><a asp-area="" asp-controller="WorkoutHistory" asp-action="Index">WorkoutHistory</a></li>
                     }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")

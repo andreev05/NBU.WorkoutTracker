@@ -1,40 +1,64 @@
-﻿@model IEnumerable<NBU.WorkoutTracker.Infrastructure.Data.Models.CompletedWorkout>
+﻿@model List<DetailedWorkoutViewModel>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Index</h2>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Index" asp-controller="Workouts">Add Completed Workout</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Workout.WorkoutName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@for (int i = 0; i < Model.Count; i++)
+{
+    <table class="table-striped table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateCreated)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Workout.WorkoutName)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.CompletedWorkoutId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.CompletedWorkoutId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.CompletedWorkoutId">Delete</a>
-                </td>
+                <th>WorkoutName: @Model[i].WorkoutName</th>
             </tr>
-        }
-    </tbody>
-</table>
+            <tr>
+                <th>Exercise Name</th>
+                <th>Target Sets</th>
+                <th>Target Reps</th>
+                <th>Target Weight</th>
+                <th>Target Mins</th>
+                <th>Actual Sets</th>
+                <th>Actual Reps</th>
+                <th>Actual Weight</th>
+                <th>Actual Mins</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int j = 0; j < Model[i].DetailedExercises.Count; j++)
+            {
+                <tr>
+                    <td>
+                        @Model[i].DetailedExercises[j].ExerciseName
+                    </td>
+                    <td>
+                        @Model[i].DetailedExercises[j].TargetSets
+                    </td>
+                    <td>
+                        @Model[i].DetailedExercises[j].TargetReps
+                    </td>
+                    <td>
+                        @Model[i].DetailedExercises[j].TargetWeight
+                    </td>
+                    <td>
+                        @Model[i].DetailedExercises[j].TargetMins
+                    </td>
+                    <td>
+                        @Model[i].DetailedExercises[j].Sets
+                    </td>
+                    <td>
+                        @Model[i].DetailedExercises[j].Reps
+                    </td>
+                    <td>
+                        @Model[i].DetailedExercises[j].Weight
+                    </td>
+                    <td>
+                        @Model[i].DetailedExercises[j].Mins
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

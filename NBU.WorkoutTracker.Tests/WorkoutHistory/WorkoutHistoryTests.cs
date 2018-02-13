@@ -60,7 +60,7 @@ namespace NBU.WorkoutTracker.Tests.WorkoutHistory
 
             //Assert
             Assert.AreEqual(result.ToList().Count, 1);
-            Assert.AreEqual(result.FirstOrDefault().CompletedExercises.FirstOrDefault().Exercise.ExerciseName, "running");
+            Assert.AreEqual(result.FirstOrDefault().DetailedExercises.FirstOrDefault().ExerciseName, "running");
         }
 
         [Test]

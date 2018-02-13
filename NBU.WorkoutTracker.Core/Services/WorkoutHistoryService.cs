@@ -30,13 +30,35 @@ namespace NBU.WorkoutTracker.Core.Services
         }
 
 
-        public IEnumerable<CompletedWorkout> GetUserWorkoutHistory(string userId)
+        public List<DetailedWorkoutViewModel> GetUserWorkoutHistory(string userId)
         {             
             var workouts = completedWorkoutsRepo.All()
                 .Include(cw => cw.Workout)
                 .Include(cw => cw.CompletedExercises)
                 .ThenInclude(ce => ce.Exercise);
-            return workouts.ToList();
+
+            var detailedWorkouts = workouts.Select(w => new DetailedWorkoutViewModel()
+            {
+                WorkoutId = w.WorkoutId,
+                WorkoutName = w.Workout.WorkoutName,
+                CompletedWorkout = w,
+                DetailedExercises = w.CompletedExercises.Select( ce => new DetailedExerciseViewModel()
+                {
+                    ExerciseId = ce.Exercise.ExerciseId,
+                    ExerciseName = ce.Exercise.ExerciseName,
+                    TargetMins = ce.Exercise.TargetMins,
+                    TargetSets = ce.Exercise.TargetSets,
+                    TargetReps = ce.Exercise.TargetReps,
+                    TargetWeight = ce.Exercise.TargetWeight,
+                    Sets = ce.Sets,
+                    Reps = ce.Reps,
+                    Weight = ce.Weight,
+                    Mins = ce.Mins,
+                    Comments = ce.Comments
+                }).ToList()
+            }).ToList();
+
+            return detailedWorkouts;
    
         }
 
