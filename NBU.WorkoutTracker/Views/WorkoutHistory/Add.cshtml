@@ -1,0 +1,70 @@
+﻿@model CreateCompletedWorkoutViewModel
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add Completed Workout</h2>
+
+<form asp-action="Add">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="WorkoutId" />
+    <div class="form-group">
+        <label asp-for="Comments" class="control-label"></label>
+        <input asp-for="Comments" class="form-control" />
+        <span asp-validation-for="Comments" class="text-danger"></span>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Exercise Name</th>
+                <th>Target Sets</th>
+                <th>Target Reps</th>
+                <th>Target Weight</th>
+                <th>Target Mins</th>
+                <th>Actual Sets</th>
+                <th>Actual Reps</th>
+                <th>Actual Weight</th>
+                <th>Actual Mins</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for (int i = 0; i < Model.DetailedExercises.Count; i++)
+        {
+            <tr>
+                <td>
+                    @Model.DetailedExercises[i].ExerciseName
+                </td>
+                <td>
+                    @Model.DetailedExercises[i].TargetSets
+                </td>
+                <td>
+                    @Model.DetailedExercises[i].TargetReps
+                </td>
+                <td>
+                    @Model.DetailedExercises[i].TargetWeight
+                </td>
+                <td>
+                    @Model.DetailedExercises[i].TargetMins
+                </td>
+                <td>
+                    <input asp-for="@Model.DetailedExercises[i].Sets" />
+                </td>
+                <td>
+                    <input asp-for="@Model.DetailedExercises[i].Reps" />
+                </td>
+                <td>
+                    <input asp-for="@Model.DetailedExercises[i].Weight" />
+                </td>
+                <td>
+                    <input asp-for="@Model.DetailedExercises[i].Mins" />
+                </td>
+            </tr>
+        }
+        </tbody>
+        
+    </table>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-default" />
+    </div>
+</form>

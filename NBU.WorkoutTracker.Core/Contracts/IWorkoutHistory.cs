@@ -6,7 +6,7 @@ using NBU.WorkoutTracker.Infrastructure.Data.Models;
 
 namespace NBU.WorkoutTracker.Core.Contracts
 {
-    public interface IWorkoutHistory
+    public interface IWorkoutHistory : IDisposable
     {
         IEnumerable<CompletedWorkout> GetUserWorkoutHistory(string userId);
 
@@ -18,6 +18,8 @@ namespace NBU.WorkoutTracker.Core.Contracts
 
         IEnumerable<DetailedExerciseViewModel> GetWorkoutExercises(string userId, int workoutId);
 
-        bool CheckId(string userId, int workoutId);
+        bool CheckUserId(string userId, int workoutId);
+
+        void Dispose();
     }
 }

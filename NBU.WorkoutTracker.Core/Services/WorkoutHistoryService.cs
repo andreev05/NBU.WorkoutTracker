@@ -12,15 +12,18 @@ namespace NBU.WorkoutTracker.Core.Services
 {
     public class WorkoutHistoryService : IWorkoutHistory
     {
+        private readonly IRDBERepository<Workout> workoutsRepo;
         private readonly IRDBERepository<CompletedWorkout> completedWorkoutsRepo;
         private readonly IRDBERepository<CompletedExercise> completedExcercisesRepo;
         private readonly IRDBERepository<Exercise> excercisesRepo;
 
         public WorkoutHistoryService(
+            IRDBERepository<Workout> workoutsRepo,
             IRDBERepository<CompletedWorkout> completedWorkoutsRepo, 
             IRDBERepository<CompletedExercise> completedExcercisesRepo,
             IRDBERepository<Exercise> excercisesRepo)
         {
+            this.workoutsRepo = workoutsRepo;
             this.completedWorkoutsRepo = completedWorkoutsRepo;
             this.completedExcercisesRepo = completedExcercisesRepo;
             this.excercisesRepo = excercisesRepo;
@@ -28,15 +31,13 @@ namespace NBU.WorkoutTracker.Core.Services
 
 
         public IEnumerable<CompletedWorkout> GetUserWorkoutHistory(string userId)
-        {
-            using (completedWorkoutsRepo)
-            {                
-                var workouts = completedWorkoutsRepo.All()
-                    .Include(cw => cw.Workout)
-                    .Include(cw => cw.CompletedExercises)
-                    .ThenInclude(ce => ce.Exercise);
-                return workouts.ToList();
-            }
+        {             
+            var workouts = completedWorkoutsRepo.All()
+                .Include(cw => cw.Workout)
+                .Include(cw => cw.CompletedExercises)
+                .ThenInclude(ce => ce.Exercise);
+            return workouts.ToList();
+   
         }
 
         public void AddCompletedWorkout(string userId, CreateCompletedWorkoutViewModel vm)
@@ -60,40 +61,53 @@ namespace NBU.WorkoutTracker.Core.Services
                     Reps = de.Reps
                 }).ToList()
             };
-
-            using (completedWorkoutsRepo)
-            {
+            
                 completedWorkoutsRepo.Add(completedWorkout);
                 completedWorkoutsRepo.SaveChanges();
-            }
         }
 
 
         public IEnumerable<DetailedExerciseViewModel> GetWorkoutExercises(string userId, int workoutId)
         {
+            var workout = workoutsRepo
+                .All()
+                .Where(w => w.WorkoutId == workoutId && w.ApplicationUserId == userId)
+                .Include(w => w.WorkoutExercises)
+                .ThenInclude(we => we.Exercise)
+                .FirstOrDefault();
 
-            using (excercisesRepo)
+            return workout.WorkoutExercises.Select(we => new DetailedExerciseViewModel()
             {
-                var exercises = excercisesRepo.All()
-                    .Include(e => e.WorkoutExercises)
-                    .Where(e => e.ApplicationUserId == userId && e.WorkoutExercises.All(we => we.WorkoutId == workoutId)).ToList();
-
-                return exercises.Select(e => new DetailedExerciseViewModel()
-                {
-                    ExerciseId = e.ExerciseId,
-                    TargetMins = e.TargetMins,
-                    TargetSets = e.TargetSets,
-                    TargetReps = e.TargetReps,
-                    TargetWeight = e.TargetWeight,
-                    ExerciseName = e.ExerciseName
-                });
-            }
+                ExerciseId = we.Exercise.ExerciseId,
+                TargetMins = we.Exercise.TargetMins,
+                TargetSets = we.Exercise.TargetSets,
+                TargetReps = we.Exercise.TargetReps,
+                TargetWeight = we.Exercise.TargetWeight,
+                ExerciseName = we.Exercise.ExerciseName
+            });
         }
 
 
-        public bool CheckId(string userId, int workoutId)
+        public bool CheckUserId(string userId, int workoutId)
         {
-            throw new NotImplementedException();
+            var workout = workoutsRepo.GetById(workoutId);
+            bool isCorrectUser = false;
+
+            if (userId == workout.ApplicationUserId)
+            {
+                isCorrectUser = true;
+            }
+            else
+            {
+                isCorrectUser = false;
+            }
+
+            return isCorrectUser;
+        }
+
+        public string GetWorkoutName(int workoutId)
+        {
+            return null;
         }
 
 
@@ -105,6 +119,14 @@ namespace NBU.WorkoutTracker.Core.Services
         public void RemoveExerciseFromCompletedWorkout(string userId, int workoutId, int excerciseId)
         {
             throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            workoutsRepo.Dispose();
+            completedWorkoutsRepo.Dispose();
+            completedExcercisesRepo.Dispose();
+            excercisesRepo.Dispose();
         }
     }
 }

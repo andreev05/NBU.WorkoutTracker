@@ -9,8 +9,10 @@ namespace NBU.WorkoutTracker.Core.ViewModels
     {
         public int WorkoutId { get; set; }
 
+        public string WorkoutName { get; set; }
+
         public string Comments { get; set; }
 
-        public IEnumerable<DetailedExerciseViewModel> DetailedExercises { get; set; }
+        public IList<DetailedExerciseViewModel> DetailedExercises { get; set; }
     }
 }

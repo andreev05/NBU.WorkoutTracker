@@ -24,43 +24,51 @@ namespace NBU.WorkoutTracker.Controllers
 
         public async Task<IActionResult> Index()
         {
-            using (userManager)
-            {
-                var user = await userManager.GetUserAsync(HttpContext.User);
-                var completedWorkouts = workoutHistoryService.GetUserWorkoutHistory(user.Id);
-                return View(completedWorkouts);
-            }
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            var completedWorkouts = workoutHistoryService.GetUserWorkoutHistory(user.Id);
+            return View(completedWorkouts);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create(int workoutId)
+        public async Task<IActionResult> Add(int workoutId)
         {
             CreateCompletedWorkoutViewModel vm = new CreateCompletedWorkoutViewModel();
-            using (userManager)
+            var user = await userManager.GetUserAsync(HttpContext.User);
+
+            if (!workoutHistoryService.CheckUserId(user.Id, workoutId))
             {
-                var user = await userManager.GetUserAsync(HttpContext.User);
-
-                if (!workoutHistoryService.CheckId(user.Id, workoutId))
-                {
-                    return NotFound();
-                }
-            
-                vm.WorkoutId = workoutId;
-
-                vm.DetailedExercises = workoutHistoryService.GetWorkoutExercises(user.Id, workoutId);
-                return View(nameof(Index));
+                return NotFound();
             }
+
+            var workout =
+            vm.WorkoutId = workoutId;
+
+            vm.DetailedExercises = workoutHistoryService.GetWorkoutExercises(user.Id, workoutId).ToList();
+            return View(nameof(Index));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCompletedWorkoutViewModel vm)
+        public async Task<IActionResult> Add(CreateCompletedWorkoutViewModel vm)
         {
-            using (userManager)
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            workoutHistoryService.AddCompletedWorkout(user.Id, vm);
+            return View(nameof(Index));
+        }
+
+        private bool disposed = false;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (!this.disposed)
             {
-                var user = await userManager.GetUserAsync(HttpContext.User);
-                workoutHistoryService.AddCompletedWorkout(user.Id, vm);
-                return View(nameof(Index));
+                if (disposing)
+                {
+                    userManager.Dispose();
+                    workoutHistoryService.Dispose();
+                    base.Dispose();
+                }
             }
+            this.disposed = true;
         }
     }
 }
