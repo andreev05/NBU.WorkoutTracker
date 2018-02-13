@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ViewModels\Exercise\" />
     <Folder Include="ViewModels\Plans\" />
   </ItemGroup>
 

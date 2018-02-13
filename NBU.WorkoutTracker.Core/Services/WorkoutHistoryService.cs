@@ -74,7 +74,9 @@ namespace NBU.WorkoutTracker.Core.Services
 
             using (excercisesRepo)
             {
-                var exercises = excercisesRepo.All().Where(e => e.ApplicationUserId == userId && e.WorkoutId == workoutId).ToList();
+                var exercises = excercisesRepo.All()
+                    .Include(e => e.WorkoutExercises)
+                    .Where(e => e.ApplicationUserId == userId && e.WorkoutExercises.All(we => we.WorkoutId == workoutId)).ToList();
 
                 return exercises.Select(e => new DetailedExerciseViewModel()
                 {

@@ -20,15 +20,13 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 
         public int? TargetSets { get; set; }
 
-        public float TargetWeight { get; set; }
+        public float? TargetWeight { get; set; }
 
-        public int TargetMins { get; set; }
+        public int? TargetMins { get; set; }
 
         public string ApplicationUserId { get; set; }
 
         public ICollection<CompletedExercise> CompletedExercises { get; set; }
-
-        public int WorkoutId { get; set; }
 
         public ICollection<WorkoutExercise> WorkoutExercises { get; set; }
 

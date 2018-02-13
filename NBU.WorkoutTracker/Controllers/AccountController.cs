@@ -60,6 +60,12 @@ namespace NBU.WorkoutTracker.Controllers
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
 
                 var appUser = await _userManager.FindByEmailAsync(model.Email);
+                if(appUser == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View(model);
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(appUser, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {

@@ -18,9 +18,9 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Models
 
         public int? Reps { get; set; }
 
-        public float Weight { get; set; }
+        public float? Weight { get; set; }
 
-        public int Mins { get; set; }
+        public int? Mins { get; set; }
 
         public string Comments { get; set; }
 

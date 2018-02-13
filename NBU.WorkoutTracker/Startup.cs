@@ -7,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using NBU.WorkoutTracker.Core.Contracts;
 using NBU.WorkoutTracker.Core.Services;
 using NBU.WorkoutTracker.Infrastructure.Data.Contexts;
+using NBU.WorkoutTracker.Infrastructure.Data.Contracts;
+using NBU.WorkoutTracker.Infrastructure.Data.Models;
+using NBU.WorkoutTracker.Infrastructure.Data.Repositores;
 using NBU.WorkoutTracker.Infrastructure.Identity;
 
 namespace NBU.WorkoutTracker
@@ -34,6 +37,8 @@ namespace NBU.WorkoutTracker
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IAdmin, AdminService>();
             services.AddScoped<IWorkoutHistory, WorkoutHistoryService>();
+            services.AddScoped<IRDBERepository<Workout>, RDBRepository<Workout>>();
+            services.AddScoped<IRDBERepository<Exercise>, RDBRepository<Exercise>>();
 
             services.AddMvc();
         }
