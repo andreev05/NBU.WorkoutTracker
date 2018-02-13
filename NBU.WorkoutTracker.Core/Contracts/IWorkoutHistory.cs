@@ -19,7 +19,5 @@ namespace NBU.WorkoutTracker.Core.Contracts
         IEnumerable<DetailedExerciseViewModel> GetWorkoutExercises(string userId, int workoutId);
 
         bool CheckUserId(string userId, int workoutId);
-
-        void Dispose();
     }
 }
