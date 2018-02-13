@@ -30,14 +30,22 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    @if (User.Identity.IsAuthenticated)
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("user"))
                     {
                     <li><a asp-area="" asp-controller="Workouts" asp-action="Index">Workouts</a></li>
                     <li><a asp-area="" asp-controller="Exercises" asp-action="Index">Exercises</a></li>
                     <li><a asp-area="" asp-controller="WorkoutHistory" asp-action="Index">WorkoutHistory</a></li>
+                    }
+                    else
+                    {
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                    {
+                    <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
                     }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
