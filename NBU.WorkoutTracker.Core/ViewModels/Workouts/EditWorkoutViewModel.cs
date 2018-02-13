@@ -13,6 +13,6 @@ namespace NBU.WorkoutTracker.Core.ViewModels
 
         public string WorkoutDetails { get; set; }
 
-        public List<SelectListItem> Exercises { get; set; }
+        public List<string> Exercises { get; set; }
     }
 }

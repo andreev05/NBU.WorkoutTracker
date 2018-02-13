@@ -39,6 +39,7 @@ namespace NBU.WorkoutTracker
             services.AddScoped<IWorkoutHistory, WorkoutHistoryService>();
             services.AddScoped<IRDBERepository<Workout>, RDBRepository<Workout>>();
             services.AddScoped<IRDBERepository<Exercise>, RDBRepository<Exercise>>();
+            services.AddScoped < IRDBERepository <WorkoutExercise>, RDBRepository<WorkoutExercise>>();
 
             services.AddMvc();
         }

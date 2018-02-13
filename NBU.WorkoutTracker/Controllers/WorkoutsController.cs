@@ -16,12 +16,15 @@ namespace NBU.WorkoutTracker.Controllers
     {
         private readonly IRDBERepository<Workout> workoutsRepo;
         private readonly IRDBERepository<Exercise> exercisesRepo;
+        private readonly IRDBERepository<WorkoutExercise> weRepo;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public WorkoutsController(IRDBERepository<Workout> workoutsRepo, IRDBERepository<Exercise> exercisesRepo, UserManager<ApplicationUser> userManager)
+
+        public WorkoutsController(IRDBERepository<Workout> workoutsRepo, IRDBERepository<Exercise> exercisesRepo, IRDBERepository<WorkoutExercise> weRepo, UserManager<ApplicationUser> userManager)
         {
             this.workoutsRepo = workoutsRepo;
             this.exercisesRepo = exercisesRepo;
+            this.weRepo = weRepo;
             this.userManager = userManager;
         }
 
@@ -69,7 +72,7 @@ namespace NBU.WorkoutTracker.Controllers
             using (userManager)
             {
                 var user = await userManager.GetUserAsync(HttpContext.User);
-                ViewBag.AllExerciseNames = exercisesRepo.All().Where(e => e.ApplicationUserId == user.Id).Select(e => new SelectListItem() { Text = e.ExerciseName }).ToList();
+                ViewBag.AllExerciseNames = exercisesRepo.All().Where(e => e.ApplicationUserId == user.Id).Select(e => new SelectListItem() { Text = e.ExerciseName, Value = e.ExerciseId.ToString() }).ToList();
             }
 
             return View();
@@ -86,12 +89,13 @@ namespace NBU.WorkoutTracker.Controllers
             {
                 using (exercisesRepo)
                 using (workoutsRepo)
+                using (weRepo)
                 using (userManager)
                 {
                     var user = await userManager.GetUserAsync(HttpContext.User);
                     var exercises = exercisesRepo.All().Where(e => e.ApplicationUserId == user.Id).ToList();
-                    var selectedExercisesNames = vm.Exercises.Where(e => e.Selected == true).Select(e => e.Text).ToList();
-                    var filteredExcercises = exercises.Where(e => selectedExercisesNames.Contains(e.ExerciseName));
+                    var selectedExercises = vm.Exercises.Select(e => Int32.Parse(e));
+                    var filteredExcercises = exercises.Where(e => selectedExercises.Contains(e.ExerciseId));
 
                     Workout workout = new Workout()
                     {
@@ -100,15 +104,16 @@ namespace NBU.WorkoutTracker.Controllers
                         DateCreated = DateTime.Now,
                         ApplicationUserId = user.Id
                     };
-                    
+                    workoutsRepo.Add(workout);
 
-                    foreach(var e in filteredExcercises)
+                    foreach (var e in filteredExcercises)
                     {
-                        workout.WorkoutExercises.Add(new WorkoutExercise() { Exercise = e, Workout = workout });
+                        weRepo.Add(new WorkoutExercise() { Exercise = e, Workout = workout });
                     }
 
-                    workoutsRepo.Add(workout);
+
                     workoutsRepo.SaveChanges();
+                    weRepo.SaveChanges();
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -130,6 +135,8 @@ namespace NBU.WorkoutTracker.Controllers
 
                 var workout = workoutsRepo.GetById(id);
 
+                var exercises = exercisesRepo.All().Where(e => workout.WorkoutExercises.All(we => we.WorkoutId == id)).ToList();
+
                 if (workout == null)
                 {
                     return NotFound();
@@ -138,15 +145,14 @@ namespace NBU.WorkoutTracker.Controllers
                 var user = await userManager.GetUserAsync(HttpContext.User);
 
                 ViewBag.AllExerciseNames = exercisesRepo.All().Where(e => e.ApplicationUserId == user.Id).Select(e => new SelectListItem() { Text = e.ExerciseName }).ToList();
+
+
                 EditWorkoutViewModel vm = new EditWorkoutViewModel()
                 {
                     WorkoutId = workout.WorkoutId,
                     WorkoutName = workout.WorkoutName,
                     WorkoutDetails = workout.WorkoutDetails,
-                    Exercises = workout.WorkoutExercises.Select(e => new SelectListItem()
-                    {
-                        Text = exercisesRepo.GetById(e.ExerciseId).ExerciseName
-                    }).ToList()
+                    Exercises = exercises.Select(e => e.ExerciseId.ToString()).ToList()
                 };
                 return View(vm);
             }
@@ -172,21 +178,42 @@ namespace NBU.WorkoutTracker.Controllers
                     var exercises = exercisesRepo.All().Where(e => e.ApplicationUserId == user.Id);
                     Workout workout = workoutsRepo.GetById(id);
 
-                    var selectedExercises = vm.Exercises.Where(e => e.Selected == true).Select(e => e.Text);
+                    var selectedExercises = vm.Exercises.Select(e => Int32.Parse(e));
                     workout.WorkoutName = vm.WorkoutName;
                     workout.WorkoutDetails = vm.WorkoutDetails;
-                    var filteredExercises = exercises.Where(e => selectedExercises.Contains(e.ExerciseName)).ToList();
+                    var filteredExercises = exercises.Where(e => selectedExercises.Contains(e.ExerciseId)).ToList();
+                    var filteredExercisesIds = filteredExercises.Select(fe => fe.ExerciseId).ToList();
+                    workoutsRepo.Update(workout);
+                    //remove
+                    var oldExercises = weRepo.All().Where(we => we.WorkoutId == id).ToList();
+                    var oldExercisesIds = oldExercises.Select(ce => ce.ExerciseId).ToList();
 
+                    var oldWE = new WorkoutExercise();
 
-                    foreach (var e in filteredExercises)
+                    //remove not selected
+                    foreach (var eId in oldExercisesIds)
                     {
-                        workout.WorkoutExercises.Add(new WorkoutExercise() { Exercise = e, Workout = workout });
+                        if(!filteredExercisesIds.Contains(eId))
+                        {
+                            oldWE = oldExercises.Where(oe => oe.ExerciseId == eId).FirstOrDefault();
+
+                            weRepo.Delete(oldWE);
+                        }
+
                     }
 
-                    workoutsRepo.Update(workout);
+                    //add not existing selected
+                    foreach (var e in filteredExercises)
+                    {
+                        if(!oldExercisesIds.Contains(e.ExerciseId))
+                        { 
+                            weRepo.Add(new WorkoutExercise() { Exercise = e, Workout = workout });
+                        }
+                    }
 
-                    
+
                     workoutsRepo.SaveChanges();
+                    weRepo.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -204,6 +231,7 @@ namespace NBU.WorkoutTracker.Controllers
                 {
                     workoutsRepo.Dispose();
                     exercisesRepo.Dispose();
+                    weRepo.Dispose();
                     userManager.Dispose();
                 }
                 return RedirectToAction(nameof(Index));

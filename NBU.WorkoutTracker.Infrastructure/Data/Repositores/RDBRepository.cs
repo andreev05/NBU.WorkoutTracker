@@ -107,6 +107,17 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Repositores
         /// Detaches given entity from the context
         /// </summary>
         /// <param name="entity">Entity to be detached</param>
+        public void Attach(T entity)
+        {
+            EntityEntry entry = this.Context.Entry(entity);
+
+            entry.State = EntityState.Added;
+        }
+
+        /// <summary>
+        /// Detaches given entity from the context
+        /// </summary>
+        /// <param name="entity">Entity to be detached</param>
         public void Detach(T entity)
         {
             EntityEntry entry = this.Context.Entry(entity);

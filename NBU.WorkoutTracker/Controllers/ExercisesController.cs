@@ -127,17 +127,23 @@ namespace NBU.WorkoutTracker.Controllers
             {
                 try
                 {
-                    using (userManager)
+                    var user = await userManager.GetUserAsync(HttpContext.User);
+                    var dbExercise = _context.Exercises.AsNoTracking().Where(e => e.ExerciseId == exercise.ExerciseId).FirstOrDefault();
+                    if (dbExercise.ApplicationUserId != user.Id)
                     {
-                        var user = await userManager.GetUserAsync(HttpContext.User);
-                        if (exercise.ApplicationUserId != user.Id)
-                        {
-                            return NotFound();
-                        }
+                        return NotFound();
                     }
 
-                    _context.Update(exercise);
+
+                    dbExercise.TargetMins = exercise.TargetMins;
+                    dbExercise.TargetReps = exercise.TargetReps;
+                    dbExercise.TargetSets = exercise.TargetSets;
+                    dbExercise.TargetWeight = exercise.TargetWeight;
+                    dbExercise.ExerciseName = exercise.ExerciseName;
+
+                    _context.Update(dbExercise);
                     await _context.SaveChangesAsync();
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -153,6 +159,7 @@ namespace NBU.WorkoutTracker.Controllers
                 finally
                 {
                     _context.Dispose();
+                    userManager.Dispose();
                 }
                 return RedirectToAction(nameof(Index));
             }

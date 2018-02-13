@@ -25,6 +25,12 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Contracts
         void Detach(T entity);
 
         /// <summary>
+        /// Attaches given entity from the context
+        /// </summary>
+        /// <param name="entity">Entity to be attached.</param>
+        void Attach(T entity);
+
+        /// <summary>
         /// Saves all made changes in trasaction
         /// </summary>
         /// <returns>Error code</returns>
