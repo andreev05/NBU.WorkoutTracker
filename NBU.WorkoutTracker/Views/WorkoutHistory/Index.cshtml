@@ -3,34 +3,40 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Completed Workouts</h2>
 <p>
     <a asp-action="Index" asp-controller="Workouts">Add Completed Workout</a>
 </p>
-@for (int i = 0; i < Model.Count; i++)
-{
-    <table class="table-striped table">
-        <thead>
-            <tr>
-                <th>WorkoutName: @Model[i].WorkoutName</th>
-            </tr>
-            <tr>
-                <th>Exercise Name</th>
-                <th>Target Sets</th>
-                <th>Target Reps</th>
-                <th>Target Weight</th>
-                <th>Target Mins</th>
-                <th>Actual Sets</th>
-                <th>Actual Reps</th>
-                <th>Actual Weight</th>
-                <th>Actual Mins</th>
-            </tr>
-        </thead>
+@if(Model.Count > 0)
+{ <table class="table-striped table">
+    <thead>
+        <tr>
+            <th></th>
+        </tr>
+        <tr>
+            <th>Workout and Exercises</th>
+            <th>Target Sets</th>
+            <th>Target Reps</th>
+            <th>Target Weight</th>
+            <th>Target Mins</th>
+            <th>Actual Sets</th>
+            <th>Actual Reps</th>
+            <th>Actual Weight</th>
+            <th>Actual Mins</th>
+        </tr>
+    </thead>
+    @for (int i = 0; i < Model.Count; i++)
+    {
+
+        <tr>
+            <td>@Model[i].WorkoutName</td>
+        </tr>
         <tbody>
             @for (int j = 0; j < Model[i].DetailedExercises.Count; j++)
             {
+
                 <tr>
-                    <td>
+                    <td style="padding-left: 3%;">
                         @Model[i].DetailedExercises[j].ExerciseName
                     </td>
                     <td>
@@ -60,5 +66,11 @@
                 </tr>
             }
         </tbody>
-    </table>
+
+    }
+</table>
+}
+else
+{
+    <div>You have not completed any workouts. Please completed workouts.</div>
 }

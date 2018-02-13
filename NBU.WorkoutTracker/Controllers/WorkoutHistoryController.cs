@@ -53,7 +53,7 @@ namespace NBU.WorkoutTracker.Controllers
         {
             var user = await userManager.GetUserAsync(HttpContext.User);
             workoutHistoryService.AddCompletedWorkout(user.Id, vm);
-            return View(nameof(Index));
+            return RedirectToAction(nameof(Index));
         }
     }
 }

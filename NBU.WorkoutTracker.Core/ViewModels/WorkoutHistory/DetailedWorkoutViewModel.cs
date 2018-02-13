@@ -11,7 +11,9 @@ namespace NBU.WorkoutTracker.Core.ViewModels
 
         public int WorkoutId { get; set; }
 
-        public CompletedWorkout CompletedWorkout { get; set; }
+        public DateTime DateCreated { get; set; }
+
+        public string Comments { get; set; }
 
         public List<DetailedExerciseViewModel> DetailedExercises { get; set; }
     }

@@ -37,12 +37,14 @@ namespace NBU.WorkoutTracker.Core.Services
                 .Include(cw => cw.CompletedExercises)
                 .ThenInclude(ce => ce.Exercise);
 
-            var detailedWorkouts = workouts.Select(w => new DetailedWorkoutViewModel()
+            List<DetailedWorkoutViewModel> detailedWorkouts
+            = workouts.Select(w => new DetailedWorkoutViewModel()
             {
                 WorkoutId = w.WorkoutId,
                 WorkoutName = w.Workout.WorkoutName,
-                CompletedWorkout = w,
-                DetailedExercises = w.CompletedExercises.Select( ce => new DetailedExerciseViewModel()
+                DateCreated = w.DateCreated,
+                Comments = w.Comments,
+                DetailedExercises = w.CompletedExercises.Select(ce => new DetailedExerciseViewModel()
                 {
                     ExerciseId = ce.Exercise.ExerciseId,
                     ExerciseName = ce.Exercise.ExerciseName,
