@@ -15,9 +15,6 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Contexts
         /// Tables with items
         /// </summary>
 
-
-        public DbSet<Plan> Plans { get; set; }
-
         public DbSet<Workout> Workouts { get; set; }
 
         public DbSet<Exercise> Exercises { get; set; }
