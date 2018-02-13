@@ -32,6 +32,7 @@ namespace NBU.WorkoutTracker.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> Create(int workoutId)
         {
             CreateCompletedWorkoutViewModel vm = new CreateCompletedWorkoutViewModel();
@@ -51,6 +52,7 @@ namespace NBU.WorkoutTracker.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<IActionResult> Create(CreateCompletedWorkoutViewModel vm)
         {
             using (userManager)

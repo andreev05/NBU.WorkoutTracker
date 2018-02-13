@@ -43,6 +43,11 @@ namespace NBU.WorkoutTracker.Infrastructure.Data.Contexts
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
+
+            builder.Entity<WorkoutExercise>().HasKey(table => new {
+                table.WorkoutId,
+                table.ExerciseId
+            });
         }
     }
 }
