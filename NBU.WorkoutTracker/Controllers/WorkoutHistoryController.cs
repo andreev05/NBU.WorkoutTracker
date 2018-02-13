@@ -30,21 +30,22 @@ namespace NBU.WorkoutTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Add(int workoutId)
+        public async Task<IActionResult> Add(int id)
         {
             CreateCompletedWorkoutViewModel vm = new CreateCompletedWorkoutViewModel();
             var user = await userManager.GetUserAsync(HttpContext.User);
 
-            if (!workoutHistoryService.CheckUserId(user.Id, workoutId))
+            if (!workoutHistoryService.CheckUserId(user.Id, id))
             {
                 return NotFound();
             }
 
-            var workout =
-            vm.WorkoutId = workoutId;
+            var workoutName = workoutHistoryService.GetWorkoutName(id);
+            vm.WorkoutId = id;
+            vm.WorkoutName = workoutName;
+            vm.DetailedExercises = workoutHistoryService.GetWorkoutExercises(user.Id, id).ToList();
 
-            vm.DetailedExercises = workoutHistoryService.GetWorkoutExercises(user.Id, workoutId).ToList();
-            return View(nameof(Index));
+            return View(vm);
         }
 
         [HttpPost]
@@ -53,22 +54,6 @@ namespace NBU.WorkoutTracker.Controllers
             var user = await userManager.GetUserAsync(HttpContext.User);
             workoutHistoryService.AddCompletedWorkout(user.Id, vm);
             return View(nameof(Index));
-        }
-
-        private bool disposed = false;
-
-        protected override void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    userManager.Dispose();
-                    workoutHistoryService.Dispose();
-                    base.Dispose();
-                }
-            }
-            this.disposed = true;
         }
     }
 }

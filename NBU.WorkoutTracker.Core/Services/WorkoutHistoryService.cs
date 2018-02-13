@@ -47,23 +47,26 @@ namespace NBU.WorkoutTracker.Core.Services
                 ApplicationUserId = userId,
                 Comments = vm.Comments,
                 DateCreated = DateTime.Now,
-                WorkoutId = vm.WorkoutId,
-                CompletedExercises = vm.DetailedExercises.Select(de => new CompletedExercise()
-                {
-                    ApplicationUserId = userId,
-                    DateCreated = DateTime.Now,
-                    Comments = de.Comments,
-                    CompletedExerciseId = de.ExerciseId,
-                    CompletedWorkoutId = vm.WorkoutId,
-                    Mins = de.Mins,
-                    Weight = de.Weight,
-                    Sets = de.Sets,
-                    Reps = de.Reps
-                }).ToList()
+                WorkoutId = vm.WorkoutId
             };
             
-                completedWorkoutsRepo.Add(completedWorkout);
-                completedWorkoutsRepo.SaveChanges();
+            completedWorkoutsRepo.Add(completedWorkout);
+
+            completedExcercisesRepo.AddRange(vm.DetailedExercises.Select(de => new CompletedExercise()
+            {
+                ApplicationUserId = userId,
+                DateCreated = DateTime.Now,
+                Comments = de.Comments,
+                ExerciseId = de.ExerciseId,
+                CompletedWorkout = completedWorkout,
+                Mins = de.Mins,
+                Weight = de.Weight,
+                Sets = de.Sets,
+                Reps = de.Reps
+            }).ToList());
+
+            completedWorkoutsRepo.SaveChanges();
+            completedExcercisesRepo.SaveChanges();
         }
 
 
@@ -107,7 +110,8 @@ namespace NBU.WorkoutTracker.Core.Services
 
         public string GetWorkoutName(int workoutId)
         {
-            return null;
+            var workout = workoutsRepo.GetById(workoutId);
+            return workout.WorkoutName;
         }
 
 
