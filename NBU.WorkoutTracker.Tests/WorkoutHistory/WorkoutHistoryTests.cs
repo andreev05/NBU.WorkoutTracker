@@ -26,6 +26,12 @@ namespace NBU.WorkoutTracker.Tests.WorkoutHistory
                     CompletedWorkoutId = 1,
                     DateCreated = DateTime.Now,
                     WorkoutId = 1,
+                    Workout = new Workout()
+                    {
+                        ApplicationUserId = "testUser",
+                        WorkoutId = 4,
+                        WorkoutName = "w1"
+                    } ,
                     CompletedExercises = new List<CompletedExercise>()
                     {
                         new CompletedExercise()
@@ -56,7 +62,7 @@ namespace NBU.WorkoutTracker.Tests.WorkoutHistory
 
             //Act
             var mockWorkoutHistoryService = new WorkoutHistoryService(mockWorkoutsRepo.Object, mockCompletedWorkoutsRepo.Object, mockCompletedExercisesRepo.Object,  mockExercisesRepo.Object);
-            var result = mockWorkoutHistoryService.GetUserWorkoutHistory("");
+            var result = mockWorkoutHistoryService.GetUserWorkoutHistory("testUser");
 
             //Assert
             Assert.AreEqual(result.ToList().Count, 1);

@@ -60,6 +60,8 @@ namespace NBU.WorkoutTracker
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
+
             app.UseStaticFiles();
 
             app.UseAuthentication();

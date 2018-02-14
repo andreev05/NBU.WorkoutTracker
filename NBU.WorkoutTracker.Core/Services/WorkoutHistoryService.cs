@@ -33,6 +33,7 @@ namespace NBU.WorkoutTracker.Core.Services
         public List<DetailedWorkoutViewModel> GetUserWorkoutHistory(string userId)
         {             
             var workouts = completedWorkoutsRepo.All()
+                .Where(cw => cw.ApplicationUserId == userId)
                 .Include(cw => cw.Workout)
                 .Include(cw => cw.CompletedExercises)
                 .ThenInclude(ce => ce.Exercise);
