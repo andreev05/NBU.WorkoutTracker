@@ -15,6 +15,7 @@
         </tr>
         <tr>
             <th>Workout and Exercises</th>
+            <th>Date</th>
             <th>Target Sets</th>
             <th>Target Reps</th>
             <th>Target Weight</th>
@@ -28,42 +29,44 @@
     @for (int i = 0; i < Model.Count; i++)
     {
 
-        <tr>
-            <td>@Model[i].WorkoutName</td>
-        </tr>
+    <tr>
+        <td>@Model[i].WorkoutName</td>
+        <td>@Model[i].DateCreated.ToString("dd/MM/yyyy")</td>
+    </tr>
         <tbody>
             @for (int j = 0; j < Model[i].DetailedExercises.Count; j++)
             {
 
-                <tr>
-                    <td style="padding-left: 3%;">
-                        @Model[i].DetailedExercises[j].ExerciseName
-                    </td>
-                    <td>
-                        @Model[i].DetailedExercises[j].TargetSets
-                    </td>
-                    <td>
-                        @Model[i].DetailedExercises[j].TargetReps
-                    </td>
-                    <td>
-                        @Model[i].DetailedExercises[j].TargetWeight
-                    </td>
-                    <td>
-                        @Model[i].DetailedExercises[j].TargetMins
-                    </td>
-                    <td>
-                        @Model[i].DetailedExercises[j].Sets
-                    </td>
-                    <td>
-                        @Model[i].DetailedExercises[j].Reps
-                    </td>
-                    <td>
-                        @Model[i].DetailedExercises[j].Weight
-                    </td>
-                    <td>
-                        @Model[i].DetailedExercises[j].Mins
-                    </td>
-                </tr>
+            <tr>
+                <td style="padding-left: 3%;">
+                    @Model[i].DetailedExercises[j].ExerciseName
+                </td>
+                <td></td>
+                <td>
+                    @Model[i].DetailedExercises[j].TargetSets
+                </td>
+                <td class="text-center">
+                    @Model[i].DetailedExercises[j].TargetReps
+                </td>
+                <td class="text-center">
+                    @Model[i].DetailedExercises[j].TargetWeight
+                </td>
+                <td class="text-center">
+                    @Model[i].DetailedExercises[j].TargetMins
+                </td>
+                <td class="text-center">
+                    @Model[i].DetailedExercises[j].Sets
+                </td>
+                <td class="text-center">
+                    @Model[i].DetailedExercises[j].Reps
+                </td>
+                <td class="text-center">
+                    @Model[i].DetailedExercises[j].Weight
+                </td>
+                <td class="text-center">
+                    @Model[i].DetailedExercises[j].Mins
+                </td>
+            </tr>
             }
         </tbody>
 

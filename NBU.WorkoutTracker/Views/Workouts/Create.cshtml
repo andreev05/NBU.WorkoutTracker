@@ -23,9 +23,12 @@
                 <input asp-for="WorkoutDetails" class="form-control" />
                 <span asp-validation-for="WorkoutDetails" class="text-danger"></span>
             </div>
-
-            <select asp-for="Exercises" asp-items="ViewBag.AllExerciseNames"></select>
+            <label asp-for="Exercises" class="control-label"></label>
+            <div>
+                <select asp-for="Exercises" asp-items="ViewBag.AllExerciseNames"></select>
+            </div>
             <div class="form-group">
+                <br />
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>
